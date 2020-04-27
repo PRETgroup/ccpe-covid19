@@ -1,0 +1,60 @@
+inputs:
+  R0: REAL
+  R0c: REAL
+outputs:
+  Ic: REAL
+  C_dot: REAL
+parameters:
+  N: REAL
+  eps: REAL
+  alpha: REAL
+  delta: REAL
+  gamma: REAL
+  CFR0: REAL
+  CFR1: REAL
+  n_ICU: REAL
+  p_ICU: REAL
+locations:
+  below_ICU:
+    invariant: patients <= n_ICU
+    flow:
+      S: -beta * S * (eps * P + Iu) - betac * S * Ic
+      E: beta * S * (eps * P + Iu) + betac * S * Ic - alpha * E
+      P: alpha * E - delta * P
+      Iu: delta * P - (gamma + c) * Iu
+      Ic: c * Iu - gamma * Ic
+      Ru: gamma * (1 - CFR) * Iu
+      Rc: gamma * (1 - CFR) * Ic
+      D: gamma * CFR * (Iu + Ic)
+      C: c * Iu
+    update:
+      beta: R0 / (eps / delta + 1 / gamma)
+      betac: R0c / (eps / delta + 1 / gamma)
+      C_dot: c * Iu
+      patients: N * (Iu + Ic) * p_ICU
+      CFR: CFR0
+    transitions:
+      - to: beyond_ICU
+        guard: patients > n_ICU
+  beyond_ICU:
+    invariant: patients > n_ICU
+    flow:
+      S: -beta * S * (eps * P + Iu) - betac * S * Ic
+      E: beta * S * (eps * P + Iu) + betac * S * Ic - alpha * E
+      P: alpha * E - delta * P
+      Iu: delta * P - (gamma + c) * Iu
+      Ic: c * Iu - gamma * Ic
+      Ru: gamma * (1 - CFR) * Iu
+      Rc: gamma * (1 - CFR) * Ic
+      D: gamma * CFR * (Iu + Ic)
+      C: c * Iu
+    update:
+      beta: R0 / (eps / delta + 1 / gamma)
+      betac: R0c / (eps / delta + 1 / gamma)
+      C_dot: c * Iu
+      patients: N * (Iu + Ic) * p_ICU
+      CFR_d: CFR1 - CFR0
+      CFR: CFR1 - CFR_d * n_ICU / patients
+    transitions:
+      - to: below_ICU
+        guard: patients <= n_ICU
