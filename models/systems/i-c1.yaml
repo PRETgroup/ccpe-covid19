@@ -20,7 +20,11 @@ system:
       type: Plant
       parameters:
         population: 60461828
+        initial_cases: 155
+        initial_case_distribution_factor: 3.07
         vaccine_arrival_date: 365
+        CFR0: 0.06
+        CFR1: 0.07
     Controller: Controller
   mappings:
     Plant.R0: Controller.R0

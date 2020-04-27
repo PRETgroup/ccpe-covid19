@@ -17,7 +17,10 @@ parameters:
     default: 4822233
   initial_cases:
     type: REAL
-    default: 100
+    default: 39
+  initial_case_distribution_factor:
+    type: REAL
+    default: 4.8
   vaccine_arrival_date:
     type: REAL
     default: -1
@@ -118,6 +121,10 @@ functions:
 initialisation:
   state: unvaccinated
   valuations:
-    S: population - initial_cases
-    E: initial_cases
+    S: population - (6 + 6 * initial_case_distribution_factor) * initial_cases
+    E: 4 * (1 + initial_case_distribution_factor) * initial_cases
+    P: (1 + initial_case_distribution_factor) * initial_cases
+    Iu: initial_case_distribution_factor * initial_cases
+    Ic: initial_cases
+    cases: initial_cases
     CFR: calc_CFR(0)
