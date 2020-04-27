@@ -8,7 +8,7 @@ This allows for the evaluation of complex control strategies in closed loop with
 ## Models
 Each of the models used in this work can be found in the [models](models) directory.
 For this we provide a set of epidemiological models and controllers for New Zealand and Italy in [HAML](https://github.com/PRETgroup/modular-code-generation/blob/master/specs/HAML.md).
-To run these models, please follow the steps for our compiler of these models --- [Modular Code Generation](https://github.com/PRETgroup/modular-code-generation)
+To run these models, please follow the steps for our compiler of these models [Modular Code Generation](https://github.com/PRETgroup/modular-code-generation)
 
 ## Data
 Pre-computed data for each of the models is available in the [data](data) directory.
