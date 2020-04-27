@@ -1,5 +1,6 @@
 outputs:
   R0: REAL
+  Level: REAL
 parameters:
   t_PreLD:
     type: REAL
@@ -17,6 +18,7 @@ locations:
       t: 1
     update:
       R0: R0_L0
+      Level: 0
     transitions:
       - to: LD
         guard: t >= t_PreLD
@@ -27,5 +29,6 @@ locations:
       t: 1
     update:
       R0: R0_L4
+      Level: 4
 initialisation:
   state: PreLD

@@ -11,7 +11,7 @@ system:
     Rc: REAL
     D: REAL
     cases: REAL
-    R0: REAL
+    Level: REAL
   definitions:
     Plant: !include ../plants/pl2.yaml
     Controller: !include ../controllers/nz-c2.yaml
@@ -37,7 +37,7 @@ system:
     Rc: Plant.Rc
     D: Plant.D
     cases: Plant.cases
-    R0: Controller.R0
+    Level: Controller.Level
 
 codegenConfig:
   execution:

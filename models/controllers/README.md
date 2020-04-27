@@ -12,6 +12,7 @@ A trivial controller which transitions to a lockdown after a predefined amount o
 | Name | Type | Description |
 |---|---|---|
 | R0 | REAL | The reproduction number depending on which state the controller is currently in |
+| Level | REAL | The control level (state) that the controller is currently in |
 
 ## [NZ-C2](nz-c2.yaml)
 
@@ -29,6 +30,7 @@ This model transitions between the different levels (which have their own respec
 |---|---|---|
 | R0 | REAL | The reproduction number for **untested cases** depending on which state the controller is currently in |
 | R0c | REAL | The reproduction number for **confirmed cases** depending on which state the controller is currently in |
+| Level | REAL | The control level (state) that the controller is currently in |
 
 ## [NZ-C3](nz-c3.yaml)
 
@@ -43,6 +45,7 @@ A simplified version of the `NZ-C2` controller which consists of only two levels
 | Name | Type | Description |
 |---|---|---|
 | R0 | REAL | The reproduction number depending on which state the controller is currently in |
+| Level | REAL | The control level (state) that the controller is currently in |
 
 ## [I-C1](i-c1.yaml)
 
@@ -60,3 +63,4 @@ This model transitions between the different levels (which have their own respec
 |---|---|---|
 | R0 | REAL | The reproduction number for **untested cases** depending on which state the controller is currently in |
 | R0c | REAL | The reproduction number for **confirmed cases** depending on which state the controller is currently in |
+| Phase | REAL | The control phase (state) that the controller is currently in |

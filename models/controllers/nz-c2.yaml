@@ -4,6 +4,7 @@ inputs:
 outputs:
   R0: REAL
   R0c: REAL
+  Level: REAL
 parameters:
   t_Pre_Level0:
     type: REAL
@@ -70,6 +71,7 @@ locations:
     update:
       R0: R0_L0
       R0c: R0_L0
+      Level: 0
     transitions:
       - to: Pre_Level4
         guard: t >= t_Pre_Level0
@@ -82,6 +84,7 @@ locations:
     update:
       R0: R0_L4
       R0c: R0_L4
+      Level: 4
     transitions:
       - to: Level3
         guard: t >= t_Pre_Level4
@@ -93,6 +96,7 @@ locations:
     update:
       R0: R0_L4
       R0c: R0_L4
+      Level: 4
     transitions:
       - to: Level3
         guard: Ic < k_L4 && t >= t_min_L4
@@ -104,6 +108,7 @@ locations:
     update:
       R0: R0_L3
       R0c: R0_L4
+      Level: 3
     transitions:
       - to: Level4
         guard: Ic >= k_L4
@@ -119,6 +124,7 @@ locations:
     update:
       R0: R0_L2
       R0c: R0_L4
+      Level: 2
     transitions:
       - to: Level4
         guard: Ic >= k_L4
@@ -138,6 +144,7 @@ locations:
     update:
       R0: R0_L1
       R0c: R0_L4
+      Level: 1
     transitions:
       - to: Level4
         guard: Ic >= k_L4
@@ -157,6 +164,7 @@ locations:
     update:
       R0: R0_L0
       R0c: R0_L0
+      Level: 0
     transitions:
       - to: Level1
         guard: Ic >= k_L1

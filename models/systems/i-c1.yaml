@@ -11,7 +11,7 @@ system:
     Rc: REAL
     D: REAL
     cases: REAL
-    R0: REAL
+    Phase: REAL
   definitions:
     Plant: !include ../plants/pl1.yaml
     Controller: !include ../controllers/i-c1.yaml
@@ -41,7 +41,7 @@ system:
     Rc: Plant.Rc
     D: Plant.D
     cases: Plant.cases
-    R0: Controller.R0
+    Phase: Controller.Phase
 
 codegenConfig:
   execution:

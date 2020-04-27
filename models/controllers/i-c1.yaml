@@ -4,6 +4,7 @@ inputs:
 outputs:
   R0: REAL
   R0c: REAL
+  Phase: REAL
 parameters:
   t_Pre_Phase0:
     type: REAL
@@ -64,6 +65,7 @@ locations:
     update:
       R0: R0_P0
       R0c: R0_P0
+      Phase: 0
     transitions:
       - to: Pre_Phase1
         guard: t >= t_Pre_Phase0
@@ -76,6 +78,7 @@ locations:
     update:
       R0: R0_P1
       R0c: R0_P3
+      Phase: 1
     transitions:
       - to: Pre_Phase2
         guard: t >= t_Pre_Phase1
@@ -88,6 +91,7 @@ locations:
     update:
       R0: R0_P2
       R0c: R0_P3
+      Phase: 2
     transitions:
       - to: Phase3
         guard: t >= t_Pre_Phase2
@@ -99,6 +103,7 @@ locations:
     update:
       R0: R0_P3
       R0c: R0_P3
+      Phase: 3
     transitions:
       - to: Phase2
         guard: C_dot <= dk_P3 && t >= t_min_P3
@@ -110,6 +115,7 @@ locations:
     update:
       R0: R0_P2
       R0c: R0_P3
+      Phase: 2
     transitions:
       - to: Phase3
         guard: Ic >= k_P3
@@ -125,6 +131,7 @@ locations:
     update:
       R0: R0_P1
       R0c: R0_P3
+      Phase: 1
     transitions:
       - to: Phase3
         guard: Ic >= k_P3
@@ -144,6 +151,7 @@ locations:
     update:
       R0: R0_P0
       R0c: R0_P0
+      Phase: 0
     transitions:
       - to: Phase3
         guard: Ic >= k_P3
