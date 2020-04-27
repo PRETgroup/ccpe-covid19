@@ -14,10 +14,10 @@ parameters:
 
   t_min_L4:
     type: REAL
-    default: 28
+    default: 14
   t_min_L3:
     type: REAL
-    default: 28
+    default: 14
   t_min_L2:
     type: REAL
     default: 14

@@ -17,7 +17,7 @@ parameters:
 
   t_min_P3:
     type: REAL
-    default: 28
+    default: 14
   t_min_P2:
     type: REAL
     default: 14
