@@ -94,6 +94,8 @@ locations:
     transitions:
       - to: fully_vaccinated
         guard: S <= 0
+        update:
+          S: 0
   fully_vaccinated:
     flow:
       E: beta * S * (eps * P + Iu + Ic) / population - alpha * E

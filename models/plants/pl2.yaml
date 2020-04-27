@@ -70,6 +70,7 @@ locations:
       t: 1
     update:
       beta: R0 / (eps / delta + 1 / gamma)
+      betac: R0c / (eps / delta + 1 / gamma)
       C_dot: c * Iu
       CFR: calc_CFR((Iu + Ic) * p_ICU)
     transitions:
@@ -90,11 +91,14 @@ locations:
       cases: c * Iu
     update:
       beta: R0 / (eps / delta + 1 / gamma)
+      betac: R0c / (eps / delta + 1 / gamma)
       C_dot: c * Iu
       CFR: calc_CFR((Iu + Ic) * p_ICU)
     transitions:
       - to: fully_vaccinated
         guard: S <= 0
+        update:
+          S: 0
   fully_vaccinated:
     flow:
       E: (beta * S * (eps * P + Iu) + betac * S * Ic) / population - alpha * E
@@ -108,6 +112,7 @@ locations:
     update:
       S: 0
       beta: R0 / (eps / delta + 1 / gamma)
+      betac: R0c / (eps / delta + 1 / gamma)
       C_dot: c * Iu
       CFR: calc_CFR((Iu + Ic) * p_ICU)
 functions:
