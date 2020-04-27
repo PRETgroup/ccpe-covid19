@@ -20,6 +20,7 @@ system:
       type: Plant
       parameters:
         population: 60461828
+        vaccine_arrival_date: 365
     Controller: Controller
   mappings:
     Plant.R0: Controller.R0

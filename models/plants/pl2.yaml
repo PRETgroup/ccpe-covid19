@@ -19,6 +19,12 @@ parameters:
   initial_cases:
     type: REAL
     default: 100
+  vaccine_arrival_date:
+    type: REAL
+    default: -1
+  vaccine_implementation_time:
+    type: REAL
+    default: -1
   eps:
     type: REAL
     default: 0.15
@@ -47,7 +53,7 @@ parameters:
     type: REAL
     default: 0.0125
 locations:
-  SEIR:
+  unvaccinated:
     flow:
       S: -(beta * S * (eps * P + Iu) + betac * S * Ic) / population
       E: (beta * S * (eps * P + Iu) + betac * S * Ic) / population - alpha * E
@@ -58,9 +64,47 @@ locations:
       Rc: gamma * (1 - CFR) * Ic
       D: gamma * CFR * (Iu + Ic)
       cases: c * Iu
+      t: 1
     update:
       beta: R0 / (eps / delta + 1 / gamma)
-      betac: R0c / (eps / delta + 1 / gamma)
+      C_dot: cases * Iu
+      CFR: calc_CFR((Iu + Ic) * p_ICU)
+    transitions:
+      - to: partially_vaccinated
+        guard: vaccine_arrival_date >= 0 && t >= vaccine_arrival_date && vaccine_implementation_time > 0
+      - to: fully_vaccinated
+        guard: vaccine_arrival_date >= 0 && t >= vaccine_arrival_date && vaccine_implementation_time <= 0
+  partially_vaccinated:
+    flow:
+      S: -(beta * S * (eps * P + Iu) + betac * S * Ic) / population - population / vaccine_implementation_time
+      E: (beta * S * (eps * P + Iu) + betac * S * Ic) / population - alpha * E
+      P: alpha * E - delta * P
+      Iu: delta * P - (gamma + c) * Iu
+      Ic: c * Iu - gamma * Ic
+      Ru: gamma * (1 - CFR) * Iu
+      Rc: gamma * (1 - CFR) * Ic
+      D: gamma * CFR * (Iu + Ic)
+      cases: c * Iu
+    update:
+      beta: R0 / (eps / delta + 1 / gamma)
+      C_dot: cases * Iu
+      CFR: calc_CFR((Iu + Ic) * p_ICU)
+    transitions:
+      - to: fully_vaccinated
+        guard: S <= 0
+  fully_vaccinated:
+    flow:
+      E: (beta * S * (eps * P + Iu) + betac * S * Ic) / population - alpha * E
+      P: alpha * E - delta * P
+      Iu: delta * P - (gamma + c) * Iu
+      Ic: c * Iu - gamma * Ic
+      Ru: gamma * (1 - CFR) * Iu
+      Rc: gamma * (1 - CFR) * Ic
+      D: gamma * CFR * (Iu + Ic)
+      cases: c * Iu
+    update:
+      S: 0
+      beta: R0 / (eps / delta + 1 / gamma)
       C_dot: cases * Iu
       CFR: calc_CFR((Iu + Ic) * p_ICU)
 functions:
@@ -73,7 +117,7 @@ functions:
       }
       return CFR0
 initialisation:
-  state: SEIR
+  state: unvaccinated
   valuations:
     S: population - initial_cases
     E: initial_cases

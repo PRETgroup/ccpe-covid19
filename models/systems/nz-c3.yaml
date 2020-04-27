@@ -16,7 +16,10 @@ system:
     Plant: !include ../plants/pl1.yaml
     Controller: !include ../controllers/nz-c3.yaml
   instances:
-    Plant: Plant
+    Plant:
+      type: Plant
+      parameters:
+        vaccine_arrival_date: 365
     Controller: Controller
   mappings:
     Plant.R0: Controller.R0
