@@ -1,0 +1,44 @@
+name: nz-c3
+
+system:
+  outputs:
+    S: REAL
+    E: REAL
+    P: REAL
+    Iu: REAL
+    Ic: REAL
+    Ru: REAL
+    Rc: REAL
+    D: REAL
+    cases: REAL
+    R0: REAL
+  definitions:
+    Plant: !include ../plants/pl1.yaml
+    Controller: !include ../controllers/nz-c3.yaml
+  instances:
+    Plant: Plant
+    Controller: Controller
+  mappings:
+    Plant.R0: Controller.R0
+
+    Controller.Ic: Plant.Ic
+
+    S: Plant.S
+    E: Plant.E
+    P: Plant.P
+    Iu: Plant.Iu
+    Ic: Plant.Ic
+    Ru: Plant.Ru
+    Rc: Plant.Rc
+    D: Plant.D
+    cases: Plant.cases
+    R0: Controller.R0
+
+codegenConfig:
+  execution:
+    stepSize: 0.001
+    simulationTime: 1000
+  logging:
+    enable: true
+    interval: 0.1
+    file: out.csv
