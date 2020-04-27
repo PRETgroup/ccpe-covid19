@@ -70,7 +70,7 @@ locations:
       t: 1
     update:
       beta: R0 / (eps / delta + 1 / gamma)
-      C_dot: cases * Iu
+      C_dot: c * Iu
       CFR: calc_CFR((Iu + Ic) * p_ICU)
     transitions:
       - to: partially_vaccinated
@@ -90,7 +90,7 @@ locations:
       cases: c * Iu
     update:
       beta: R0 / (eps / delta + 1 / gamma)
-      C_dot: cases * Iu
+      C_dot: c * Iu
       CFR: calc_CFR((Iu + Ic) * p_ICU)
     transitions:
       - to: fully_vaccinated
@@ -108,7 +108,7 @@ locations:
     update:
       S: 0
       beta: R0 / (eps / delta + 1 / gamma)
-      C_dot: cases * Iu
+      C_dot: c * Iu
       CFR: calc_CFR((Iu + Ic) * p_ICU)
 functions:
   calc_CFR:
