@@ -32,7 +32,7 @@ This model transitions between the different levels (which have their own respec
 
 ## [NZ-C3](nz-c3.yaml)
 
-A simplified version of the `NZ-C3` controller which consists of only two levels - no controls being implemented and a full lockdown.
+A simplified version of the `NZ-C2` controller which consists of only two levels - no controls being implemented and a full lockdown.
 
 ### Inputs
 | Name | Type | Description |
