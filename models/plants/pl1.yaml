@@ -1,12 +1,23 @@
 inputs:
   R0: REAL
 outputs:
+  S: REAL
+  E: REAL
+  P: REAL
+  Iu: REAL
   Ic: REAL
+  Ru: REAL
+  Rc: REAL
+  D: REAL
+  cases: REAL
   C_dot: REAL
 parameters:
-  N:
+  population:
     type: REAL
     default: 4822233
+  initial_cases:
+    type: REAL
+    default: 100
   eps:
     type: REAL
     default: 0.15
@@ -17,6 +28,9 @@ parameters:
     type: REAL
     default: 1
   gamma:
+    type: REAL
+    default: 0.1
+  c:
     type: REAL
     default: 0.1
   CFR0:
@@ -32,44 +46,33 @@ parameters:
     type: REAL
     default: 0.0125
 locations:
-  below_ICU:
-    invariant: patients <= n_ICU
+  SEIR:
     flow:
-      S: -beta * S * (eps * P + Iu + Ic)
-      E: beta * S * (eps * P + Iu + Ic) - alpha * E
+      S: -beta * S * (eps * P + Iu + Ic) / population
+      E: beta * S * (eps * P + Iu + Ic) / population - alpha * E
       P: alpha * E - delta * P
       Iu: delta * P - (gamma + c) * Iu
       Ic: c * Iu - gamma * Ic
       Ru: gamma * (1 - CFR) * Iu
       Rc: gamma * (1 - CFR) * Ic
       D: gamma * CFR * (Iu + Ic)
-      C: c * Iu
+      cases: c * Iu
     update:
       beta: R0 / (eps / delta + 1 / gamma)
-      C_dot: c * Iu
-      patients: N * (Iu + Ic) * p_ICU
-      CFR: CFR0
-    transitions:
-      - to: beyond_ICU
-        guard: patients > n_ICU
-  beyond_ICU:
-    invariant: patients > n_ICU
-    flow:
-      S: -beta * S * (eps * P + Iu + Ic)
-      E: beta * S * (eps * P + Iu + Ic) - alpha * E
-      P: alpha * E - delta * P
-      Iu: delta * P - (gamma + c) * Iu
-      Ic: c * Iu - gamma * Ic
-      Ru: gamma * (1 - CFR) * Iu
-      Rc: gamma * (1 - CFR) * Ic
-      D: gamma * CFR * (Iu + Ic)
-      C: c * Iu
-    update:
-      beta: R0 / (eps / delta + 1 / gamma)
-      C_dot: c * Iu
-      patients: N * (Iu + Ic) * p_ICU
-      CFR_d: CFR1 - CFR0
-      CFR: CFR1 - CFR_d * n_ICU / patients
-    transitions:
-      - to: below_ICU
-        guard: patients <= n_ICU
+      C_dot: cases * Iu
+      CFR: calc_CFR((Iu + Ic) * p_ICU)
+functions:
+  calc_CFR:
+    inputs:
+      ICU_patients: REAL
+    logic: |
+      if(ICU_patients > n_ICU) {
+        return CFR1 - (CFR1 - CFR0) * n_ICU / ICU_patients
+      }
+      return CFR0
+initialisation:
+  state: SEIR
+  valuations:
+    S: population - initial_cases
+    E: initial_cases
+    CFR: calc_CFR(0)

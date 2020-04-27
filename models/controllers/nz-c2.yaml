@@ -162,3 +162,5 @@ locations:
         guard: Ic >= k_L1
         update:
           t: 0
+initialisation:
+  state: Pre_Level0

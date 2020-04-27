@@ -153,3 +153,5 @@ locations:
         guard: Ic >= k_P1
         update:
           t: 0
+initialisation:
+  state: Pre_Phase0

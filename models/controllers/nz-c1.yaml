@@ -27,3 +27,5 @@ locations:
       t: 1
     update:
       R0: R0_L4
+initialisation:
+  state: PreLD

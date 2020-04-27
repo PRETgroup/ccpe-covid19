@@ -28,3 +28,5 @@ locations:
     transitions:
       - to: Level0
         guard: Ic <= k_L4 / 2
+initialisation:
+  state: Level0
