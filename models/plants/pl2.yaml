@@ -5,15 +5,33 @@ outputs:
   Ic: REAL
   C_dot: REAL
 parameters:
-  N: REAL
-  eps: REAL
-  alpha: REAL
-  delta: REAL
-  gamma: REAL
-  CFR0: REAL
-  CFR1: REAL
-  n_ICU: REAL
-  p_ICU: REAL
+  N:
+    type: REAL
+    default: 4822233
+  eps:
+    type: REAL
+    default: 0.15
+  alpha:
+    type: REAL
+    default: 0.25
+  delta:
+    type: REAL
+    default: 1
+  gamma:
+    type: REAL
+    default: 0.1
+  CFR0:
+    type: REAL
+    default: 0.01
+  CFR1:
+    type: REAL
+    default: 0.02
+  n_ICU:
+    type: REAL
+    default: 300
+  p_ICU:
+    type: REAL
+    default: 0.0125
 locations:
   below_ICU:
     invariant: patients <= n_ICU
