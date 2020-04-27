@@ -23,7 +23,7 @@ This model uses a single transmission rate for both confirmed and untested cases
 
 ## [PL-2](pl2.yaml)
 
-An extended version of PL-1 which uses separate transmission rates for confirmed and untested cases which allows for the modelling of enforced isolation of positive cases.
+An extended version of `PL-1` which uses separate transmission rates for confirmed and untested cases which allows for the modelling of enforced isolation of positive cases.
 
 ### Inputs
 | Name | Type | Description |
