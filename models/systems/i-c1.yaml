@@ -21,7 +21,7 @@ system:
       parameters:
         population: 60461828
         initial_cases: 155
-        initial_case_distribution_factor: 3.07
+        initial_case_distribution_factor: 3.071752496328926
         vaccine_arrival_date: 365
         CFR0: 0.06
         CFR1: 0.07
