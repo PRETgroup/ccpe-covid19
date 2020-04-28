@@ -51,3 +51,5 @@ codegenConfig:
     enable: true
     interval: 0.1
     file: out.csv
+  maximumInterTransitions: 1
+  requireOneIntraTransitionPerTick: true
