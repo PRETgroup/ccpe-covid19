@@ -1,5 +1,7 @@
 # Compositional Epidemiology of COVID-19
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3785720.svg)](https://doi.org/10.5281/zenodo.3785720)
+
 This repository contains the models and data used for our work on modelling COVID-19 in a compositional manner.
 
 This work combined existing work on SEIR modelling for COVID-19 with controller models which captured government interventions.
