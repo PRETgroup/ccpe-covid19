@@ -127,9 +127,9 @@ functions:
 initialisation:
   state: unvaccinated
   valuations:
-    S: population - (6 + 6 * initial_case_distribution_factor) * initial_cases
-    E: 4 * (1 + initial_case_distribution_factor) * initial_cases
-    P: (1 + initial_case_distribution_factor) * initial_cases
+    S: population - ((1 + (1/alpha) + (1/alpha) * (1/delta)) * (1 + initial_case_distribution_factor) * initial_cases)
+    E: (1/alpha) * (1/delta) * (1 + initial_case_distribution_factor) * initial_cases
+    P: (1/delta) * (1 + initial_case_distribution_factor) * initial_cases
     Iu: initial_case_distribution_factor * initial_cases
     Ic: initial_cases
     cases: initial_cases
