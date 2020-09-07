@@ -1,0 +1,54 @@
+name: nz-c2b
+
+system:
+  outputs:
+    S: REAL
+    E: REAL
+    P: REAL
+    Iu: REAL
+    Ic: REAL
+    Ru: REAL
+    Rc: REAL
+    D: REAL
+    cases: REAL
+    Level: REAL
+    R: REAL
+  definitions:
+    Plant: !include ../plants/pl3.yaml
+    Controller: !include ../controllers/nz-c2b.yaml
+  instances:
+    Plant:
+      type: Plant
+      parameters:
+        vaccine_arrival_date: 1000
+    Controller: Controller
+  mappings:
+    Plant.R0: Controller.R0
+    Plant.R0c: Controller.R0c
+    Plant.c: Controller.c
+
+    Controller.Ic: Plant.Ic
+    Controller.C_dot: Plant.C_dot
+
+    S: Plant.S
+    E: Plant.E
+    P: Plant.P
+    Iu: Plant.Iu
+    Ic: Plant.Ic
+    Ru: Plant.Ru
+    Rc: Plant.Rc
+    D: Plant.D
+    cases: Plant.cases
+    Level: Controller.Level
+    R: Plant.R_effective
+
+codegenConfig:
+  execution:
+    stepSize: 0.001
+    simulationTime: 1000
+  logging:
+    enable: true
+    interval: 0.1
+    file: out.csv
+  maximumInterTransitions: 1
+  requireOneIntraTransitionPerTick: true
