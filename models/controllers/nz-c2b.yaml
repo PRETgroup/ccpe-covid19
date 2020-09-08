@@ -67,7 +67,7 @@ parameters:
     default: 2.5
   R0_L1:
     type: REAL
-    default: 1.57
+    default: 2.5
   R0_L2:
     type: REAL
     default: 1.384
@@ -79,14 +79,14 @@ parameters:
     default: 0.316
   R0_Iso:
     type: REAL
-    default: 0.0
+    default: 0.02
 
   c_L0:
     type: REAL
     default: 0.10
   c_L1:
     type: REAL
-    default: 0.10
+    default: 0.01
   c_L2:
     type: REAL
     default: 0.15

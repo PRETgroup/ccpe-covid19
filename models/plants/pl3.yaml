@@ -81,8 +81,8 @@ locations:
       - to: unvaccinated
         guard: t == 100
         update:
-          E: E + 1
-          S: S - 1
+          E: E + 5
+          S: S - 5
       # - to: unvaccinated
       #   guard: true
       #   update:
