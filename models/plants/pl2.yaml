@@ -1,6 +1,7 @@
 inputs:
   R0: REAL
   R0c: REAL
+  c: REAL
 outputs:
   S: REAL
   E: REAL
@@ -38,9 +39,6 @@ parameters:
     type: REAL
     default: 1
   gamma:
-    type: REAL
-    default: 0.1
-  c:
     type: REAL
     default: 0.1
   CFR0:

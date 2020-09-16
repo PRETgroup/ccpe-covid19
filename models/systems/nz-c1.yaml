@@ -13,7 +13,7 @@ system:
     cases: REAL
     Level: REAL
   definitions:
-    Plant: !include ../plants/pl3.yaml
+    Plant: !include ../plants/pl2.yaml
     Controller: !include ../controllers/nz-c1.yaml
   instances:
     Plant: Plant
