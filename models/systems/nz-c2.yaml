@@ -20,6 +20,8 @@ system:
       type: Plant
       parameters:
         vaccine_arrival_date: 365
+        second_wave_date: 100
+        second_wave_size: 5
     Controller: Controller
   mappings:
     Plant.R0: Controller.R0

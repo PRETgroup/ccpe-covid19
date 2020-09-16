@@ -30,6 +30,12 @@ parameters:
   vaccine_implementation_time:
     type: REAL
     default: -1
+  second_wave_date:
+    type: REAL
+    default: -1
+  second_wave_size:
+    type: REAL
+    default: 1
   eps:
     type: REAL
     default: 0.15
@@ -79,10 +85,10 @@ locations:
       - to: fully_vaccinated
         guard: vaccine_arrival_date >= 0 && t >= vaccine_arrival_date && vaccine_implementation_time <= 0
       - to: unvaccinated
-        guard: t == 100
+        guard: t == second_wave_date
         update:
-          E: E + 5
-          S: S - 5
+          E: E + second_wave_size
+          S: S - second_wave_size
   partially_vaccinated:
     flow:
       S: -(beta * S * (eps * P + Iu) + betac * S * Ic) / population - population / vaccine_implementation_time
