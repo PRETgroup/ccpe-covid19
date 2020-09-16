@@ -83,15 +83,6 @@ locations:
         update:
           E: E + 5
           S: S - 5
-      # - to: unvaccinated
-      #   guard: true
-      #   update:
-      #     Ru: Ru + (Iu - check_lower_bound(Iu)) + (P - check_lower_bound(P)) + (E - check_lower_bound(E))
-      #     Iu: check_lower_bound(Iu)
-      #     P: check_lower_bound(P)
-      #     E: check_lower_bound(E)
-      #     Rc: Rc + (Ic - check_lower_bound(Ic))
-      #     Ic: check_lower_bound(Ic)
   partially_vaccinated:
     flow:
       S: -(beta * S * (eps * P + Iu) + betac * S * Ic) / population - population / vaccine_implementation_time
@@ -140,14 +131,6 @@ functions:
         return CFR1 - (CFR1 - CFR0) * n_ICU / ICU_patients
       }
       return CFR0
-  check_lower_bound:
-    inputs:
-      value: REAL
-    logic: |
-      if(value < 0.5) {
-        return 0
-      }
-      return value
 initialisation:
   state: unvaccinated
   valuations:
