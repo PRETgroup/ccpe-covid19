@@ -13,13 +13,15 @@ system:
     cases: REAL
     Level: REAL
   definitions:
-    Plant: !include ../plants/pl1.yaml
+    Plant: !include ../plants/pl3.yaml
     Controller: !include ../controllers/nz-c1.yaml
   instances:
     Plant: Plant
     Controller: Controller
   mappings:
     Plant.R0: Controller.R0
+    Plant.R0c: Controller.R0c
+    Plant.c: Controller.c
 
     S: Plant.S
     E: Plant.E
@@ -38,7 +40,7 @@ codegenConfig:
     simulationTime: 1000
   logging:
     enable: true
-    interval: 0.1
+    interval: 1
     file: out.csv
   maximumInterTransitions: 1
   requireOneIntraTransitionPerTick: true

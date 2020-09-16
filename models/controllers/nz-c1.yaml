@@ -1,16 +1,28 @@
 outputs:
   R0: REAL
+  R0c: REAL
+  c: REAL
   Level: REAL
 parameters:
   t_PreLD:
     type: REAL
-    default: 6
+    default: 5
   R0_L0:
     type: REAL
     default: 2.5
   R0_L4:
     type: REAL
     default: 0.316
+  R0_Iso:
+    type: REAL
+    default: 0.02
+
+  c_L0:
+    type: REAL
+    default: 0.10
+  c_L4:
+    type: REAL
+    default: 0.30
 locations:
   PreLD:
     invariant: t <= t_PreLD
@@ -18,6 +30,8 @@ locations:
       t: 1
     update:
       R0: R0_L0
+      R0c: R0_Iso
+      c: c_L0
       Level: 0
     transitions:
       - to: LD
@@ -29,6 +43,8 @@ locations:
       t: 1
     update:
       R0: R0_L4
+      R0c: R0_Iso
+      c: c_L4
       Level: 4
 initialisation:
   state: PreLD
