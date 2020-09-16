@@ -13,7 +13,7 @@ system:
     cases: REAL
     Level: REAL
   definitions:
-    Plant: !include ../plants/pl2.yaml
+    Plant: !include ../plants/pl3.yaml
     Controller: !include ../controllers/nz-c2.yaml
   instances:
     Plant:
@@ -24,6 +24,7 @@ system:
   mappings:
     Plant.R0: Controller.R0
     Plant.R0c: Controller.R0c
+    Plant.c: Controller.c
 
     Controller.Ic: Plant.Ic
     Controller.C_dot: Plant.C_dot
