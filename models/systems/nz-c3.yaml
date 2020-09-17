@@ -40,10 +40,10 @@ system:
 codegenConfig:
   execution:
     stepSize: 0.001
-    simulationTime: 1000
+    simulationTime: 600
   logging:
     enable: true
-    interval: 0.1
-    file: out.csv
+    interval: 1
+    file: nz-c3.csv
   maximumInterTransitions: 1
   requireOneIntraTransitionPerTick: true
