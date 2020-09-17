@@ -16,4 +16,4 @@ A system which composes the `NZ-C3` controller with the `PL-1` plant model, with
 
 ## [I-C1](i-c1.yaml)
 
-A system which composes the `I-C1` controller with the `PL-2` plant model, with associated Italy parameters.
+A system which composes the `I-C1` controller with the `PL-1` plant model, with associated Italy parameters.
