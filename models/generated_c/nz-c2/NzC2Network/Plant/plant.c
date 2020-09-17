@@ -14,9 +14,9 @@ void PlantInit(Plant* me) {
     me->state = PLANT_UNVACCINATED;
 
     // Initialise Outputs
-    me->s = 4822233 - (6 + 6 * 4.8) * 39;
-    me->e = 4 * (1 + 4.8) * 39;
-    me->p = (1 + 4.8) * 39;
+    me->s = 4822233 - (1 + 1 / 0.25 + (1 / 0.25) * (1 / 1)) * (1 + 4.8) * 39;
+    me->e = (1 / 0.25) * (1 / 1) * (1 + 4.8) * 39;
+    me->p = (1 / 1) * (1 + 4.8) * 39;
     me->iu = 4.8 * 39;
     me->ic = 39;
     me->ru = 0;
@@ -24,6 +24,7 @@ void PlantInit(Plant* me) {
     me->d = 0;
     me->cases = 39;
     me->c_dot = 0;
+    me->r_effective = 0;
 
     // Initialise Internal Variables
     me->t = 0;
@@ -46,6 +47,7 @@ void PlantRun(Plant* me) {
     double d_u = me->d;
     double cases_u = me->cases;
     double c_dot_u = me->c_dot;
+    double r_effective_u = me->r_effective;
 
     double t_u = me->t;
     double beta_u = me->beta;
@@ -64,6 +66,13 @@ void PlantRun(Plant* me) {
             else if(365 >= 0 && me->t >= 365 && -1 <= 0) {
                 // Next state is fully_vaccinated
                 state_u = PLANT_FULLY_VACCINATED;
+            }
+            else if(me->t == 100) {
+                e_u = me->e + 5;
+                s_u = me->s - 5;
+
+                // Next state is unvaccinated
+                state_u = PLANT_UNVACCINATED;
             }
             break;
         case PLANT_PARTIALLY_VACCINATED: // Logic for state partially_vaccinated
@@ -90,6 +99,7 @@ void PlantRun(Plant* me) {
     me->d = d_u;
     me->cases = cases_u;
     me->c_dot = c_dot_u;
+    me->r_effective = r_effective_u;
 
     me->t = t_u;
     me->beta = beta_u;
@@ -103,19 +113,24 @@ void PlantRun(Plant* me) {
             s_u = me->s + (-(me->beta * me->s * (0.15 * me->p + me->iu) + me->betac * me->s * me->ic) / 4822233) * STEP_SIZE;
             e_u = me->e + ((me->beta * me->s * (0.15 * me->p + me->iu) + me->betac * me->s * me->ic) / 4822233 - 0.25 * me->e) * STEP_SIZE;
             p_u = me->p + (0.25 * me->e - 1 * me->p) * STEP_SIZE;
-            iu_u = me->iu + (1 * me->p - (0.1 + 0.1) * me->iu) * STEP_SIZE;
-            ic_u = me->ic + (0.1 * me->iu - 0.1 * me->ic) * STEP_SIZE;
+            iu_u = me->iu + (1 * me->p - (0.1 + me->c) * me->iu) * STEP_SIZE;
+            ic_u = me->ic + (me->c * me->iu - 0.1 * me->ic) * STEP_SIZE;
             ru_u = me->ru + 0.1 * (1 - me->cfr) * me->iu * STEP_SIZE;
             rc_u = me->rc + 0.1 * (1 - me->cfr) * me->ic * STEP_SIZE;
             d_u = me->d + 0.1 * me->cfr * (me->iu + me->ic) * STEP_SIZE;
-            cases_u = me->cases + 0.1 * me->iu * STEP_SIZE;
+            cases_u = me->cases + me->c * me->iu * STEP_SIZE;
             t_u = me->t + 1 * STEP_SIZE;
 
             beta_u = me->r0 / (0.15 / 1 + 1 / 0.1);
             betac_u = me->r0c / (0.15 / 1 + 1 / 0.1);
-            c_dot_u = 0.1 * iu_u;
+            c_dot_u = me->c * iu_u;
             cfr_u = CalcCfr((iu_u + ic_u) * 0.0125);
+            r_effective_u = ((1 / 0.1) * me->c * iu_u) / ic_u;
 
+            if((t_u > 100 && me->t < 100) || (t_u < 100 && me->t > 100)) {
+                // Need to saturate t to 100
+                t_u = 100;
+            }
             if(t_u < 365 && me->t > 365) {
                 // Need to saturate t to 365
                 t_u = 365;
@@ -126,17 +141,18 @@ void PlantRun(Plant* me) {
             s_u = me->s + (-(me->beta * me->s * (0.15 * me->p + me->iu) + me->betac * me->s * me->ic) / 4822233 - 4822233 / -1) * STEP_SIZE;
             e_u = me->e + ((me->beta * me->s * (0.15 * me->p + me->iu) + me->betac * me->s * me->ic) / 4822233 - 0.25 * me->e) * STEP_SIZE;
             p_u = me->p + (0.25 * me->e - 1 * me->p) * STEP_SIZE;
-            iu_u = me->iu + (1 * me->p - (0.1 + 0.1) * me->iu) * STEP_SIZE;
-            ic_u = me->ic + (0.1 * me->iu - 0.1 * me->ic) * STEP_SIZE;
+            iu_u = me->iu + (1 * me->p - (0.1 + me->c) * me->iu) * STEP_SIZE;
+            ic_u = me->ic + (me->c * me->iu - 0.1 * me->ic) * STEP_SIZE;
             ru_u = me->ru + 0.1 * (1 - me->cfr) * me->iu * STEP_SIZE;
             rc_u = me->rc + 0.1 * (1 - me->cfr) * me->ic * STEP_SIZE;
             d_u = me->d + 0.1 * me->cfr * (me->iu + me->ic) * STEP_SIZE;
-            cases_u = me->cases + 0.1 * me->iu * STEP_SIZE;
+            cases_u = me->cases + me->c * me->iu * STEP_SIZE;
 
             beta_u = me->r0 / (0.15 / 1 + 1 / 0.1);
             betac_u = me->r0c / (0.15 / 1 + 1 / 0.1);
-            c_dot_u = 0.1 * iu_u;
+            c_dot_u = me->c * iu_u;
             cfr_u = CalcCfr((iu_u + ic_u) * 0.0125);
+            r_effective_u = ((1 / 0.1) * me->c * iu_u) / ic_u;
 
             if(s_u > 0 && me->s < 0) {
                 // Need to saturate S to 0
@@ -147,18 +163,19 @@ void PlantRun(Plant* me) {
         case PLANT_FULLY_VACCINATED: // Intra-location logic for state fully_vaccinated
             e_u = me->e + ((me->beta * me->s * (0.15 * me->p + me->iu) + me->betac * me->s * me->ic) / 4822233 - 0.25 * me->e) * STEP_SIZE;
             p_u = me->p + (0.25 * me->e - 1 * me->p) * STEP_SIZE;
-            iu_u = me->iu + (1 * me->p - (0.1 + 0.1) * me->iu) * STEP_SIZE;
-            ic_u = me->ic + (0.1 * me->iu - 0.1 * me->ic) * STEP_SIZE;
+            iu_u = me->iu + (1 * me->p - (0.1 + me->c) * me->iu) * STEP_SIZE;
+            ic_u = me->ic + (me->c * me->iu - 0.1 * me->ic) * STEP_SIZE;
             ru_u = me->ru + 0.1 * (1 - me->cfr) * me->iu * STEP_SIZE;
             rc_u = me->rc + 0.1 * (1 - me->cfr) * me->ic * STEP_SIZE;
             d_u = me->d + 0.1 * me->cfr * (me->iu + me->ic) * STEP_SIZE;
-            cases_u = me->cases + 0.1 * me->iu * STEP_SIZE;
+            cases_u = me->cases + me->c * me->iu * STEP_SIZE;
 
             s_u = 0;
             beta_u = me->r0 / (0.15 / 1 + 1 / 0.1);
             betac_u = me->r0c / (0.15 / 1 + 1 / 0.1);
-            c_dot_u = 0.1 * iu_u;
+            c_dot_u = me->c * iu_u;
             cfr_u = CalcCfr((iu_u + ic_u) * 0.0125);
+            r_effective_u = ((1 / 0.1) * me->c * iu_u) / ic_u;
 
             break;
     }
@@ -174,6 +191,7 @@ void PlantRun(Plant* me) {
     me->d = d_u;
     me->cases = cases_u;
     me->c_dot = c_dot_u;
+    me->r_effective = r_effective_u;
 
     me->t = t_u;
     me->beta = beta_u;

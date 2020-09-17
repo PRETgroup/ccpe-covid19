@@ -16,6 +16,10 @@ typedef int bool;
 enum ControllerStates {
     CONTROLLER_PRE_LEVEL0,
     CONTROLLER_PRE_LEVEL4,
+    CONTROLLER_PRE_LEVEL3,
+    CONTROLLER_PRE_LEVEL2,
+    CONTROLLER_PRE_LEVEL1,
+    CONTROLLER_PRE_LEVEL3_2,
     CONTROLLER_LEVEL4,
     CONTROLLER_LEVEL3,
     CONTROLLER_LEVEL2,
@@ -33,6 +37,7 @@ typedef struct {
     // Declare Outputs
     double r0;
     double r0c;
+    double c;
     double level;
     
     // Declare Internal Variables

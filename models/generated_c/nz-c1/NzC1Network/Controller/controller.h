@@ -23,6 +23,8 @@ typedef struct {
     
     // Declare Outputs
     double r0;
+    double r0c;
+    double c;
     double level;
     
     // Declare Internal Variables

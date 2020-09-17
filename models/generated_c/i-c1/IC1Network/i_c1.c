@@ -22,7 +22,17 @@ void IC1Init(IC1* me) {
 
 // i-c1 Execution function
 void IC1Run(IC1* me) {
-    /* Output Mapping */
+    // Mappings
+    me->controller_data.c_dot = me->plant_data.c_dot;
+    me->controller_data.ic = me->plant_data.ic;
+    me->plant_data.r0 = me->controller_data.r0;
+
+    // Run Automata
+    PlantRun(&me->plant_data);
+
+    ControllerRun(&me->controller_data);
+
+    // Output Mapping
     me->d = me->plant_data.d;
     me->e = me->plant_data.e;
     me->ic = me->plant_data.ic;
@@ -33,16 +43,4 @@ void IC1Run(IC1* me) {
     me->ru = me->plant_data.ru;
     me->s = me->plant_data.s;
     me->cases = me->plant_data.cases;
-
-    /* Mappings */
-    me->controller_data.c_dot = me->plant_data.c_dot;
-    me->controller_data.ic = me->plant_data.ic;
-
-    me->plant_data.r0 = me->controller_data.r0;
-
-
-    /* Run Automata */
-    PlantRun(&me->plant_data);
-
-    ControllerRun(&me->controller_data);
 }
