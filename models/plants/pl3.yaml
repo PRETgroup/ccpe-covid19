@@ -13,6 +13,7 @@ outputs:
   D: REAL
   cases: REAL
   C_dot: REAL
+  R_effective: REAL
 parameters:
   population:
     type: REAL
@@ -29,6 +30,12 @@ parameters:
   vaccine_implementation_time:
     type: REAL
     default: -1
+  second_wave_date:
+    type: REAL
+    default: -1
+  second_wave_size:
+    type: REAL
+    default: 1
   eps:
     type: REAL
     default: 0.15
@@ -71,11 +78,17 @@ locations:
       betac: R0c / (eps / delta + 1 / gamma)
       C_dot: c * Iu
       CFR: calc_CFR((Iu + Ic) * p_ICU)
+      R_effective: (1 / gamma) * (c * Iu) / Ic
     transitions:
       - to: partially_vaccinated
         guard: vaccine_arrival_date >= 0 && t >= vaccine_arrival_date && vaccine_implementation_time > 0
       - to: fully_vaccinated
         guard: vaccine_arrival_date >= 0 && t >= vaccine_arrival_date && vaccine_implementation_time <= 0
+      - to: unvaccinated
+        guard: t == second_wave_date
+        update:
+          E: E + second_wave_size
+          S: S - second_wave_size
   partially_vaccinated:
     flow:
       S: -(beta * S * (eps * P + Iu) + betac * S * Ic) / population - population / vaccine_implementation_time
@@ -92,6 +105,7 @@ locations:
       betac: R0c / (eps / delta + 1 / gamma)
       C_dot: c * Iu
       CFR: calc_CFR((Iu + Ic) * p_ICU)
+      R_effective: (1 / gamma) * (c * Iu) / Ic
     transitions:
       - to: fully_vaccinated
         guard: S <= 0
@@ -113,6 +127,7 @@ locations:
       betac: R0c / (eps / delta + 1 / gamma)
       C_dot: c * Iu
       CFR: calc_CFR((Iu + Ic) * p_ICU)
+      R_effective: (1 / gamma) * (c * Iu) / Ic
 functions:
   calc_CFR:
     inputs:

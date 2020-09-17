@@ -13,17 +13,20 @@ system:
     cases: REAL
     Level: REAL
   definitions:
-    Plant: !include ../plants/pl2.yaml
+    Plant: !include ../plants/pl3.yaml
     Controller: !include ../controllers/nz-c2.yaml
   instances:
     Plant:
       type: Plant
       parameters:
         vaccine_arrival_date: 365
+        second_wave_date: 100
+        second_wave_size: 5
     Controller: Controller
   mappings:
     Plant.R0: Controller.R0
     Plant.R0c: Controller.R0c
+    Plant.c: Controller.c
 
     Controller.Ic: Plant.Ic
     Controller.C_dot: Plant.C_dot
@@ -42,10 +45,10 @@ system:
 codegenConfig:
   execution:
     stepSize: 0.001
-    simulationTime: 1000
+    simulationTime: 600
   logging:
     enable: true
-    interval: 0.1
-    file: out.csv
+    interval: 1
+    file: nz-c2.csv
   maximumInterTransitions: 1
   requireOneIntraTransitionPerTick: true

@@ -24,6 +24,8 @@ typedef struct {
     
     // Declare Inputs
     double r0;
+    double r0c;
+    double c;
     
     // Declare Outputs
     double s;
@@ -40,6 +42,7 @@ typedef struct {
     // Declare Internal Variables
     double t;
     double beta;
+    double betac;
     double cfr;
 
     // State

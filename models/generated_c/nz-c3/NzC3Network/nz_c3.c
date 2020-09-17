@@ -22,7 +22,16 @@ void NzC3Init(NzC3* me) {
 
 // nz-c3 Execution function
 void NzC3Run(NzC3* me) {
-    /* Output Mapping */
+    // Mappings
+    me->controller_data.ic = me->plant_data.ic;
+    me->plant_data.r0 = me->controller_data.r0;
+
+    // Run Automata
+    PlantRun(&me->plant_data);
+
+    ControllerRun(&me->controller_data);
+
+    // Output Mapping
     me->d = me->plant_data.d;
     me->e = me->plant_data.e;
     me->ic = me->plant_data.ic;
@@ -33,15 +42,4 @@ void NzC3Run(NzC3* me) {
     me->ru = me->plant_data.ru;
     me->s = me->plant_data.s;
     me->cases = me->plant_data.cases;
-
-    /* Mappings */
-    me->controller_data.ic = me->plant_data.ic;
-
-    me->plant_data.r0 = me->controller_data.r0;
-
-
-    /* Run Automata */
-    PlantRun(&me->plant_data);
-
-    ControllerRun(&me->controller_data);
 }

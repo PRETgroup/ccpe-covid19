@@ -48,8 +48,22 @@ void ControllerRun(Controller* me) {
             if(me->t >= 10) {
                 t_u = 0;
 
-                // Next state is Phase3
-                state_u = CONTROLLER_PHASE3;
+                // Next state is Pre_Phase3
+                state_u = CONTROLLER_PRE_PHASE3;
+            }
+            break;
+        case CONTROLLER_PRE_PHASE3: // Logic for state Pre_Phase3
+            if(me->t >= 129) {
+                t_u = 0;
+
+                // Next state is Pre_Phase4
+                state_u = CONTROLLER_PRE_PHASE4;
+            }
+            break;
+        case CONTROLLER_PRE_PHASE4: // Logic for state Pre_Phase4
+            if(me->t >= 32) {
+                // Next state is Phase2
+                state_u = CONTROLLER_PHASE2;
             }
             break;
         case CONTROLLER_PHASE3: // Logic for state Phase3
@@ -138,7 +152,7 @@ void ControllerRun(Controller* me) {
             t_u = me->t + 1 * STEP_SIZE;
 
             r0_u = 4.8051;
-            r0c_u = 0.5216;
+            r0c_u = 0.5808;
             phase_u = 1;
 
             if(t_u < 6 && me->t > 6) {
@@ -150,8 +164,8 @@ void ControllerRun(Controller* me) {
         case CONTROLLER_PRE_PHASE2: // Intra-location logic for state Pre_Phase2
             t_u = me->t + 1 * STEP_SIZE;
 
-            r0_u = 3.2693;
-            r0c_u = 0.5216;
+            r0_u = 3.2704;
+            r0c_u = 0.5808;
             phase_u = 2;
 
             if(t_u < 10 && me->t > 10) {
@@ -160,11 +174,37 @@ void ControllerRun(Controller* me) {
             }
 
             break;
+        case CONTROLLER_PRE_PHASE3: // Intra-location logic for state Pre_Phase3
+            t_u = me->t + 1 * STEP_SIZE;
+
+            r0_u = 0.5808;
+            r0c_u = 0.5808;
+            phase_u = 3;
+
+            if(t_u < 129 && me->t > 129) {
+                // Need to saturate t to 129
+                t_u = 129;
+            }
+
+            break;
+        case CONTROLLER_PRE_PHASE4: // Intra-location logic for state Pre_Phase4
+            t_u = me->t + 1 * STEP_SIZE;
+
+            r0_u = 2.6472;
+            r0c_u = 0.5808;
+            phase_u = 2;
+
+            if(t_u < 32 && me->t > 32) {
+                // Need to saturate t to 32
+                t_u = 32;
+            }
+
+            break;
         case CONTROLLER_PHASE3: // Intra-location logic for state Phase3
             t_u = me->t + 1 * STEP_SIZE;
 
-            r0_u = 0.5216;
-            r0c_u = 0.5216;
+            r0_u = 0.5808;
+            r0c_u = 0.5808;
             phase_u = 3;
 
             if(t_u < 14 && me->t > 14) {
@@ -176,8 +216,8 @@ void ControllerRun(Controller* me) {
         case CONTROLLER_PHASE2: // Intra-location logic for state Phase2
             t_u = me->t + 1 * STEP_SIZE;
 
-            r0_u = 3.2693;
-            r0c_u = 0.5216;
+            r0_u = 3.2704;
+            r0c_u = 0.5808;
             phase_u = 2;
 
             if(t_u < 14 && me->t > 14) {
@@ -190,7 +230,7 @@ void ControllerRun(Controller* me) {
             t_u = me->t + 1 * STEP_SIZE;
 
             r0_u = 4.8051;
-            r0c_u = 0.5216;
+            r0c_u = 0.5808;
             phase_u = 1;
 
             if(t_u < 14 && me->t > 14) {

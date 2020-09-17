@@ -24,7 +24,7 @@ system:
         initial_case_distribution_factor: 3.071752496328926
         vaccine_arrival_date: 365
         CFR0: 0.06
-        CFR1: 0.07
+        CFR1: 0.08
     Controller: Controller
   mappings:
     Plant.R0: Controller.R0
@@ -46,10 +46,10 @@ system:
 codegenConfig:
   execution:
     stepSize: 0.001
-    simulationTime: 1000
+    simulationTime: 600
   logging:
     enable: true
-    interval: 0.1
-    file: out.csv
+    interval: 1
+    file: i-c1.csv
   maximumInterTransitions: 1
   requireOneIntraTransitionPerTick: true

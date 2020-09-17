@@ -2,7 +2,7 @@
 
 static double CalcCfr(double icu_patients) {
     if(icu_patients > 300) {
-        return 0.07 - ((0.07 - 0.06) * 300) / icu_patients;
+        return 0.08 - ((0.08 - 0.06) * 300) / icu_patients;
     }
     return 0.06;
 }

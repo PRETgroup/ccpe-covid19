@@ -22,7 +22,17 @@ void NzC1Init(NzC1* me) {
 
 // nz-c1 Execution function
 void NzC1Run(NzC1* me) {
-    /* Output Mapping */
+    // Mappings
+    me->plant_data.r0 = me->controller_data.r0;
+    me->plant_data.r0c = me->controller_data.r0c;
+    me->plant_data.c = me->controller_data.c;
+
+    // Run Automata
+    PlantRun(&me->plant_data);
+
+    ControllerRun(&me->controller_data);
+
+    // Output Mapping
     me->d = me->plant_data.d;
     me->e = me->plant_data.e;
     me->ic = me->plant_data.ic;
@@ -33,13 +43,4 @@ void NzC1Run(NzC1* me) {
     me->ru = me->plant_data.ru;
     me->s = me->plant_data.s;
     me->cases = me->plant_data.cases;
-
-    /* Mappings */
-    me->plant_data.r0 = me->controller_data.r0;
-
-
-    /* Run Automata */
-    PlantRun(&me->plant_data);
-
-    ControllerRun(&me->controller_data);
 }

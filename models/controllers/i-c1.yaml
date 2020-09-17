@@ -15,6 +15,12 @@ parameters:
   t_Pre_Phase2:
     type: REAL
     default: 10
+  t_Pre_Phase3:
+    type: REAL
+    default: 129
+  t_Pre_Phase2_2:
+    type: REAL
+    default: 32
 
   t_min_P3:
     type: REAL
@@ -53,10 +59,13 @@ parameters:
     default: 4.8051
   R0_P2:
     type: REAL
-    default: 3.2693
+    default: 3.2704
   R0_P3:
     type: REAL
-    default: 0.5216
+    default: 0.5808
+  R0_P4:
+    type: REAL
+    default: 2.6472
 locations:
   Pre_Phase0:
     invariant: t <= t_Pre_Phase0
@@ -93,10 +102,34 @@ locations:
       R0c: R0_P3
       Phase: 2
     transitions:
-      - to: Phase3
+      - to: Pre_Phase3
         guard: t >= t_Pre_Phase2
         update:
           t: 0
+  Pre_Phase3:
+    invariant: t <= t_Pre_Phase3
+    flow:
+      t: 1
+    update:
+      R0: R0_P3
+      R0c: R0_P3
+      Phase: 3
+    transitions:
+      - to: Pre_Phase4
+        guard: t >= t_Pre_Phase3
+        update:
+          t: 0
+  Pre_Phase4:
+    invariant: t <= t_Pre_Phase2_2
+    flow:
+      t: 1
+    update:
+      R0: R0_P4
+      R0c: R0_P3
+      Phase: 2
+    transitions:
+      - to: Phase2
+        guard: t >= t_Pre_Phase2_2
   Phase3:
     flow:
       t: 1

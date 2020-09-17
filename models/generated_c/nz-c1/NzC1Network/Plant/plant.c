@@ -14,9 +14,9 @@ void PlantInit(Plant* me) {
     me->state = PLANT_UNVACCINATED;
 
     // Initialise Outputs
-    me->s = 4822233 - (6 + 6 * 4.8) * 39;
-    me->e = 4 * (1 + 4.8) * 39;
-    me->p = (1 + 4.8) * 39;
+    me->s = 4822233 - (1 + 1 / 0.25 + (1 / 0.25) * (1 / 1)) * (1 + 4.8) * 39;
+    me->e = (1 / 0.25) * (1 / 1) * (1 + 4.8) * 39;
+    me->p = (1 / 1) * (1 + 4.8) * 39;
     me->iu = 4.8 * 39;
     me->ic = 39;
     me->ru = 0;
@@ -28,6 +28,7 @@ void PlantInit(Plant* me) {
     // Initialise Internal Variables
     me->t = 0;
     me->beta = 0;
+    me->betac = 0;
     me->cfr = CalcCfr(0);
 }
 
@@ -48,6 +49,7 @@ void PlantRun(Plant* me) {
 
     double t_u = me->t;
     double beta_u = me->beta;
+    double betac_u = me->betac;
     double cfr_u = me->cfr;
 
 
@@ -91,25 +93,27 @@ void PlantRun(Plant* me) {
 
     me->t = t_u;
     me->beta = beta_u;
+    me->betac = betac_u;
     me->cfr = cfr_u;
 
 
     // Intra-location logic for every state
     switch(me->state) {
         case PLANT_UNVACCINATED: // Intra-location logic for state unvaccinated
-            s_u = me->s + ((-me->beta * me->s * (0.15 * me->p + me->iu + me->ic)) / 4822233) * STEP_SIZE;
-            e_u = me->e + ((me->beta * me->s * (0.15 * me->p + me->iu + me->ic)) / 4822233 - 0.25 * me->e) * STEP_SIZE;
+            s_u = me->s + (-(me->beta * me->s * (0.15 * me->p + me->iu) + me->betac * me->s * me->ic) / 4822233) * STEP_SIZE;
+            e_u = me->e + ((me->beta * me->s * (0.15 * me->p + me->iu) + me->betac * me->s * me->ic) / 4822233 - 0.25 * me->e) * STEP_SIZE;
             p_u = me->p + (0.25 * me->e - 1 * me->p) * STEP_SIZE;
-            iu_u = me->iu + (1 * me->p - (0.1 + 0.1) * me->iu) * STEP_SIZE;
-            ic_u = me->ic + (0.1 * me->iu - 0.1 * me->ic) * STEP_SIZE;
+            iu_u = me->iu + (1 * me->p - (0.1 + me->c) * me->iu) * STEP_SIZE;
+            ic_u = me->ic + (me->c * me->iu - 0.1 * me->ic) * STEP_SIZE;
             ru_u = me->ru + 0.1 * (1 - me->cfr) * me->iu * STEP_SIZE;
             rc_u = me->rc + 0.1 * (1 - me->cfr) * me->ic * STEP_SIZE;
             d_u = me->d + 0.1 * me->cfr * (me->iu + me->ic) * STEP_SIZE;
-            cases_u = me->cases + 0.1 * me->iu * STEP_SIZE;
+            cases_u = me->cases + me->c * me->iu * STEP_SIZE;
             t_u = me->t + 1 * STEP_SIZE;
 
             beta_u = me->r0 / (0.15 / 1 + 1 / 0.1);
-            c_dot_u = 0.1 * iu_u;
+            betac_u = me->r0c / (0.15 / 1 + 1 / 0.1);
+            c_dot_u = me->c * iu_u;
             cfr_u = CalcCfr((iu_u + ic_u) * 0.0125);
 
             if(t_u < (-1) && me->t > (-1)) {
@@ -119,18 +123,19 @@ void PlantRun(Plant* me) {
 
             break;
         case PLANT_PARTIALLY_VACCINATED: // Intra-location logic for state partially_vaccinated
-            s_u = me->s + ((-me->beta * me->s * (0.15 * me->p + me->iu + me->ic)) / 4822233 - 4822233 / -1) * STEP_SIZE;
-            e_u = me->e + ((me->beta * me->s * (0.15 * me->p + me->iu + me->ic)) / 4822233 - 0.25 * me->e) * STEP_SIZE;
+            s_u = me->s + (-(me->beta * me->s * (0.15 * me->p + me->iu) + me->betac * me->s * me->ic) / 4822233 - 4822233 / -1) * STEP_SIZE;
+            e_u = me->e + ((me->beta * me->s * (0.15 * me->p + me->iu) + me->betac * me->s * me->ic) / 4822233 - 0.25 * me->e) * STEP_SIZE;
             p_u = me->p + (0.25 * me->e - 1 * me->p) * STEP_SIZE;
-            iu_u = me->iu + (1 * me->p - (0.1 + 0.1) * me->iu) * STEP_SIZE;
-            ic_u = me->ic + (0.1 * me->iu - 0.1 * me->ic) * STEP_SIZE;
+            iu_u = me->iu + (1 * me->p - (0.1 + me->c) * me->iu) * STEP_SIZE;
+            ic_u = me->ic + (me->c * me->iu - 0.1 * me->ic) * STEP_SIZE;
             ru_u = me->ru + 0.1 * (1 - me->cfr) * me->iu * STEP_SIZE;
             rc_u = me->rc + 0.1 * (1 - me->cfr) * me->ic * STEP_SIZE;
             d_u = me->d + 0.1 * me->cfr * (me->iu + me->ic) * STEP_SIZE;
-            cases_u = me->cases + 0.1 * me->iu * STEP_SIZE;
+            cases_u = me->cases + me->c * me->iu * STEP_SIZE;
 
             beta_u = me->r0 / (0.15 / 1 + 1 / 0.1);
-            c_dot_u = 0.1 * iu_u;
+            betac_u = me->r0c / (0.15 / 1 + 1 / 0.1);
+            c_dot_u = me->c * iu_u;
             cfr_u = CalcCfr((iu_u + ic_u) * 0.0125);
 
             if(s_u > 0 && me->s < 0) {
@@ -140,18 +145,19 @@ void PlantRun(Plant* me) {
 
             break;
         case PLANT_FULLY_VACCINATED: // Intra-location logic for state fully_vaccinated
-            e_u = me->e + ((me->beta * me->s * (0.15 * me->p + me->iu + me->ic)) / 4822233 - 0.25 * me->e) * STEP_SIZE;
+            e_u = me->e + ((me->beta * me->s * (0.15 * me->p + me->iu) + me->betac * me->s * me->ic) / 4822233 - 0.25 * me->e) * STEP_SIZE;
             p_u = me->p + (0.25 * me->e - 1 * me->p) * STEP_SIZE;
-            iu_u = me->iu + (1 * me->p - (0.1 + 0.1) * me->iu) * STEP_SIZE;
-            ic_u = me->ic + (0.1 * me->iu - 0.1 * me->ic) * STEP_SIZE;
+            iu_u = me->iu + (1 * me->p - (0.1 + me->c) * me->iu) * STEP_SIZE;
+            ic_u = me->ic + (me->c * me->iu - 0.1 * me->ic) * STEP_SIZE;
             ru_u = me->ru + 0.1 * (1 - me->cfr) * me->iu * STEP_SIZE;
             rc_u = me->rc + 0.1 * (1 - me->cfr) * me->ic * STEP_SIZE;
             d_u = me->d + 0.1 * me->cfr * (me->iu + me->ic) * STEP_SIZE;
-            cases_u = me->cases + 0.1 * me->iu * STEP_SIZE;
+            cases_u = me->cases + me->c * me->iu * STEP_SIZE;
 
             s_u = 0;
             beta_u = me->r0 / (0.15 / 1 + 1 / 0.1);
-            c_dot_u = 0.1 * iu_u;
+            betac_u = me->r0c / (0.15 / 1 + 1 / 0.1);
+            c_dot_u = me->c * iu_u;
             cfr_u = CalcCfr((iu_u + ic_u) * 0.0125);
 
             break;
@@ -171,6 +177,7 @@ void PlantRun(Plant* me) {
 
     me->t = t_u;
     me->beta = beta_u;
+    me->betac = betac_u;
     me->cfr = cfr_u;
 
 }
