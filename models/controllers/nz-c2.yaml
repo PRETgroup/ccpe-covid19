@@ -42,16 +42,16 @@ parameters:
 
   k_L1:
     type: REAL
-    default: 50
+    default: 1
   k_L2:
     type: REAL
-    default: 250
+    default: 5
   k_L3:
     type: REAL
-    default: 500
+    default: 50
   k_L4:
     type: REAL
-    default: 40000
+    default: 100
   dk_L1:
     type: REAL
     default: 0.01
